@@ -81,5 +81,8 @@
     "prepublish": ". ./resources/prepublish.sh",
     "preversion": ". ./resources/checkgit.sh && npm test",
     "test": "npm run lint && npm run check && npm run build"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.4.5"
   }
 }
