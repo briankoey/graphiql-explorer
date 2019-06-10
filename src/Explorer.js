@@ -218,9 +218,9 @@ function coerceArgValue(
             const parsed = JSON.parse(value);
             if (typeof parsed === 'boolean') {
               return {kind: 'BooleanValue', value: parsed};
-            } else {
+            } 
               return {kind: 'BooleanValue', value: false};
-            }
+            
           } catch (e) {
             return {
               kind: 'BooleanValue',
@@ -235,16 +235,16 @@ function coerceArgValue(
       }
     } catch (e) {
       console.error('error coercing arg value', e, value);
-      return {kind: 'StringValue', value: value};
+      return {kind: 'StringValue', value};
     }
   } else {
     try {
       const parsedValue = argType.parseValue(value);
       if (parsedValue) {
         return {kind: 'EnumValue', value: String(parsedValue)};
-      } else {
+      } 
         return {kind: 'EnumValue', value: argType.getValues()[0].name};
-      }
+      
     } catch (e) {
       return {kind: 'EnumValue', value: argType.getValues()[0].name};
     }
@@ -355,7 +355,7 @@ class InputArgView extends React.PureComponent<InputArgViewProps, {}> {
               ...field,
               value: {
                 kind: 'ObjectValue',
-                fields: fields,
+                fields,
               },
             }
           : field,
@@ -401,7 +401,7 @@ export function defaultValue(
 ): ValueNode {
   if (isEnumType(argType)) {
     return {kind: 'EnumValue', value: argType.getValues()[0].name};
-  } else {
+  } 
     switch (argType.name) {
       case 'String':
         return {kind: 'StringValue', value: ''};
@@ -414,7 +414,7 @@ export function defaultValue(
       default:
         return {kind: 'StringValue', value: ''};
     }
-  }
+  
 }
 
 function defaultGetDefaultScalarArgValue(
@@ -740,7 +740,7 @@ class AbstractArgView extends React.PureComponent<AbstractArgViewProps, {}> {
         <span
           style={{cursor: 'pointer'}}
           onClick={argValue ? this.props.removeArg : this.props.addArg}>
-          <Checkbox checked={!!argValue} />
+          <Checkbox checked={Boolean(argValue)} />
           <span title={arg.description} style={{color: '#8B2BB9'}}>
             {arg.name}
             {isRequiredArgument(arg) ? '*' : ''}:
@@ -845,7 +845,7 @@ class AbstractView extends React.PureComponent<AbstractViewProps, {}> {
         <span
           style={{cursor: 'pointer'}}
           onClick={selection ? this._removeFragment : this._addFragment}>
-          <Checkbox checked={!!selection} />
+          <Checkbox checked={Boolean(selection)} />
           <span style={{color: '#CA9800'}}>
             {this.props.implementingType.name}
           </span>
@@ -967,7 +967,7 @@ function defaultArgs(
 class FieldView extends React.PureComponent<FieldViewProps, {}> {
   _previousSelection: ?SelectionNode;
   _addAllFieldsToSelections = rawSubfields => {
-    const subFields: Array<FieldNode> = !!rawSubfields
+    const subFields: Array<FieldNode> = rawSubfields
       ? Object.keys(rawSubfields).map(fieldName => {
           return {
             kind: 'Field',
@@ -986,10 +986,10 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
       ...this.props.selections.filter(selection => {
         if (selection.kind === 'InlineFragment') {
           return true;
-        } else {
+        } 
           // Remove the current selection set for the target field
           return selection.name.value !== this.props.field.name;
-        }
+        
       }),
       {
         kind: 'Field',
@@ -1031,7 +1031,7 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
       const fieldType = getNamedType(this.props.field.type);
       const rawSubfields = isObjectType(fieldType) && fieldType.getFields();
 
-      const shouldSelectAllSubfields = !!rawSubfields && event.altKey;
+      const shouldSelectAllSubfields = Boolean(rawSubfields) && event.altKey;
 
       shouldSelectAllSubfields
         ? this._addAllFieldsToSelections(rawSubfields)
@@ -1132,9 +1132,9 @@ class FieldView extends React.PureComponent<FieldViewProps, {}> {
           data-field-type={type.name}
           onClick={this._handleUpdateSelections}>
           {isObjectType(type) ? (
-            <span>{!!selection ? graphiqlArrowOpen : graphiqlArrowClosed}</span>
+            <span>{selection ? graphiqlArrowOpen : graphiqlArrowClosed}</span>
           ) : null}
-          {isObjectType(type) ? null : <Checkbox checked={!!selection} />}
+          {isObjectType(type) ? null : <Checkbox checked={Boolean(selection)} />}
           <span style={{color: 'rgb(31, 97, 160)'}}>{field.name}</span>
         </span>
         {selection && args.length ? (
@@ -1247,7 +1247,7 @@ let parseQueryMemoize: ?[string, DocumentNode] = null;
 function memoizeParseQuery(query: string): DocumentNode {
   if (parseQueryMemoize && parseQueryMemoize[0] === query) {
     return parseQueryMemoize[1];
-  } else {
+  } 
     const result = parseQuery(query);
     if (!result) {
       return DEFAULT_DOCUMENT;
@@ -1255,14 +1255,14 @@ function memoizeParseQuery(query: string): DocumentNode {
       if (parseQueryMemoize) {
         // Most likely a temporarily invalid query while they type
         return parseQueryMemoize[1];
-      } else {
+      } 
         return DEFAULT_DOCUMENT;
-      }
-    } else {
+      
+    } 
       parseQueryMemoize = [query, result];
       return result;
-    }
-  }
+    
+  
 }
 
 const buttonStyle = {
@@ -1342,7 +1342,7 @@ class RootView extends React.PureComponent<RootViewProps, {}> {
       };
     }
 
-    this.props.onEdit(newOperationDef);
+    this.props.onEdit(newOperationDef, selections);
   };
 
   _onOperationRename = event =>
@@ -1395,7 +1395,7 @@ class RootView extends React.PureComponent<RootViewProps, {}> {
               onChange={this._onOperationRename}
             />
           </span>
-          {!!this.props.onTypeName ? (
+          {this.props.onTypeName ? (
             <span>
               <br />
               {`on ${this.props.onTypeName}`}
@@ -1477,9 +1477,9 @@ class Explorer extends React.PureComponent<Props, State> {
           return definition;
         } else if (definition.kind === 'OperationDefinition') {
           return definition;
-        } else {
+        } 
           return null;
-        }
+        
       })
       .filter(Boolean);
 
@@ -1502,9 +1502,9 @@ class Explorer extends React.PureComponent<Props, State> {
       const newDefinitions = existingDefs.map(existingOperation => {
         if (targetOperation === existingOperation) {
           return newOperation;
-        } else {
+        } 
           return existingOperation;
-        }
+        
       });
 
       return {
@@ -1525,10 +1525,10 @@ class Explorer extends React.PureComponent<Props, State> {
         : existingDefs.filter(def => {
             if (def.kind === 'OperationDefinition') {
               return def.operation === kind;
-            } else {
+            } 
               // Don't support adding fragments from explorer
               return false;
-            }
+            
           });
 
       const newOperationName = `My${capitalize(kind)}${
@@ -1563,7 +1563,7 @@ class Explorer extends React.PureComponent<Props, State> {
         name: {kind: 'Name', value: newOperationName},
         variableDefinitions: [],
         directives: [],
-        selectionSet: selectionSet,
+        selectionSet,
         loc: null,
       };
 
@@ -1671,7 +1671,7 @@ class Explorer extends React.PureComponent<Props, State> {
                 getDefaultScalarArgValue={getDefaultScalarArgValue}
                 makeDefaultArg={makeDefaultArg}
                 onRunOperation={() => {
-                  if (!!this.props.onRunOperation) {
+                  if (this.props.onRunOperation) {
                     this.props.onRunOperation(operationName);
                   }
                 }}
@@ -1680,7 +1680,7 @@ class Explorer extends React.PureComponent<Props, State> {
           },
         )}
         <div className="variable-editor-title" style={explorerActionsStyle}>
-          {!!queryFields ? (
+          {queryFields ? (
             <button
               className={'toolbar-button'}
               style={buttonStyle}
@@ -1689,7 +1689,7 @@ class Explorer extends React.PureComponent<Props, State> {
               + ADD NEW QUERY
             </button>
           ) : null}
-          {!!mutationFields ? (
+          {mutationFields ? (
             <button
               className={'toolbar-button'}
               style={buttonStyle}
@@ -1698,7 +1698,7 @@ class Explorer extends React.PureComponent<Props, State> {
               + ADD NEW MUTATION
             </button>
           ) : null}
-          {!!subscriptionFields ? (
+          {subscriptionFields ? (
             <button
               className={'toolbar-button'}
               style={buttonStyle}
@@ -1707,6 +1707,13 @@ class Explorer extends React.PureComponent<Props, State> {
               + ADD NEW SUBSCRIPTION
             </button>
           ) : null}
+           <button
+              className={'toolbar-button'}
+              style={buttonStyle}
+              type="link"
+              onClick={() => addOperation('mutation')}>
+              + CONSTRUCT VARIABLES
+            </button>
         </div>
       </div>
     );
@@ -1720,7 +1727,7 @@ class ErrorBoundary extends React.Component<
   state = {hasError: false, error: null, errorInfo: null};
 
   componentDidCatch(error, errorInfo) {
-    this.setState({hasError: true, error: error, errorInfo: errorInfo});
+    this.setState({hasError: true, error, errorInfo});
     console.error('Error in component', error, errorInfo);
   }
 
