@@ -1679,7 +1679,7 @@ class Explorer extends React.PureComponent<Props, State> {
             );
           },
         )}
-        <div className="variable-editor-title" style={explorerActionsStyle}>
+        {/* <div className="variable-editor-title" style={explorerActionsStyle}>
           {queryFields ? (
             <button
               className={'toolbar-button'}
@@ -1714,7 +1714,7 @@ class Explorer extends React.PureComponent<Props, State> {
               onClick={() => addOperation('mutation')}>
               + CONSTRUCT VARIABLES
             </button>
-        </div>
+        </div> */}
       </div>
     );
   }
