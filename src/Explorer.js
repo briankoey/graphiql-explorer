@@ -1572,7 +1572,7 @@ class Explorer extends React.PureComponent<Props, State> {
         // just replace it with our new definition
         viewingDefaultOperation
           ? [newDefinition]
-          : [...parsedQuery.definitions, newDefinition];
+          : [newDefinition];
 
       const newOperationDef = {
         ...parsedQuery,
@@ -1679,7 +1679,7 @@ class Explorer extends React.PureComponent<Props, State> {
             );
           },
         )}
-        {/* <div className="variable-editor-title" style={explorerActionsStyle}>
+        <div className="variable-editor-title" style={explorerActionsStyle}>
           {queryFields ? (
             <button
               className={'toolbar-button'}
@@ -1698,7 +1698,7 @@ class Explorer extends React.PureComponent<Props, State> {
               + ADD NEW MUTATION
             </button>
           ) : null}
-          {subscriptionFields ? (
+          {/* {subscriptionFields ? (
             <button
               className={'toolbar-button'}
               style={buttonStyle}
@@ -1713,8 +1713,8 @@ class Explorer extends React.PureComponent<Props, State> {
               type="link"
               onClick={() => addOperation('mutation')}>
               + CONSTRUCT VARIABLES
-            </button>
-        </div> */}
+            </button> */}
+        </div>
       </div>
     );
   }
